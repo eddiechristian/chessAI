@@ -1,0 +1,1 @@
+{"rustc":18204830484536976040,"features":"[]","target":10888993697326797290,"profile":13902919397333705783,"path":1036222786711178230,"deps":[["lazy_static v1.0.0",6111617278756413926],["uuid v0.1.18",10361796979468592116]],"local":[{"MtimeBased":[[1525489625,0],".fingerprint/chess-rs-c9c59bd3733d1543/dep-bin-chess_rs-c9c59bd3733d1543"]}],"rustflags":[],"epoch":"Epoch2015"}

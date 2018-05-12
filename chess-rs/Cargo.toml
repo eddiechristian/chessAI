@@ -1,0 +1,9 @@
+[package]
+name = "chess-rs"
+version = "0.1.0"
+authors = ["Eddie <eddiechristian1@gmail.com>"]
+
+[dependencies]
+uuid = "0.1.17"
+lazy_static = "1.0"
+termion = "1.0"
