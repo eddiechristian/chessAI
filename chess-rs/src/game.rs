@@ -69,14 +69,14 @@ impl Piece {
                             let coord0 = &previous_player_move[0].to_string().into_bytes();
                             let coord1 = &previous_player_move[1].to_string().into_bytes();
 
-                            let en_passant_move = format!("en-passant{}-{}{}",
-                                    previous_player_move[1],
+                            let en_passant_move = format!("en-passant{}{}-{}",
+                                    ((coord0[0] + coord1[0]) / 2 ) as char,
                                     match  self.piece_type {
                                         PieceType::WHITE_PAWN => '6',
                                         PieceType::BLACK_PAWN => '3',
                                         _ => ' '
                                     },
-                                    ((coord0[0] + coord1[0]) / 2 ) as char,
+                                    previous_player_move[1],
                                     );
                             self.allowed_moves.push(en_passant_move.to_string());
                         }
@@ -293,6 +293,7 @@ impl Game {
                 PlayerColor::BLACK => PlayerColor::WHITE
             }
         };
+        println!("player_turn {:?}", self.player_turn);
         self.calculate_new_moves(&squares);
     }
 
@@ -320,24 +321,22 @@ impl Game {
         // };
         // state_map.insert("H1".to_string(),"WHITE_ROOK2".to_string());
         //
-        // let white_knight1 = Piece {
-        //     piece_type: PieceType::WHITE_KNIGHT,
-        //     piece_value: game_state::get_piece_integer(PieceType::WHITE_KNIGHT),
-        //     current_coord: "B1".to_string(),
-        //     allowed_moves: vec!["C3".to_string(), "A3".to_string()],
-        //     pieces_affected: move_vecs::affected_pieces_map.get("B1").unwrap() as *const PieceAffected,
-        // };
-        // state_map.insert("B1".to_string(),"WHITE_KNIGHT1".to_string());
-        //
-        // let white_knight2 = Piece {
-        //     piece_type: PieceType::WHITE_KNIGHT,
-        //     piece_value: game_state::get_piece_integer(PieceType::WHITE_KNIGHT),
-        //     current_coord: "G1".to_string(),
-        //     allowed_moves: vec!["H3".to_string(), "F3".to_string()],
-        //     pieces_affected: move_vecs::affected_pieces_map.get("G1").unwrap() as *const PieceAffected,
-        // };
-        // state_map.insert("G1".to_string(),"WHITE_KNIGHT2".to_string());
-        //
+        let white_knight1 = Piece {
+            piece_type: PieceType::WHITE_KNIGHT,
+            piece_value: game_state::get_piece_integer(PieceType::WHITE_KNIGHT),
+            current_coord: "B1".to_string(),
+            allowed_moves: vec!["C3".to_string(), "A3".to_string()],
+        };
+        state_map.insert("B1".to_string(),"WHITE_KNIGHT1".to_string());
+
+        let white_knight2 = Piece {
+            piece_type: PieceType::WHITE_KNIGHT,
+            piece_value: game_state::get_piece_integer(PieceType::WHITE_KNIGHT),
+            current_coord: "G1".to_string(),
+            allowed_moves: vec!["H3".to_string(), "F3".to_string()],
+        };
+        state_map.insert("G1".to_string(),"WHITE_KNIGHT2".to_string());
+
         // let white_bishop1 = Piece {
         //     piece_type: PieceType::WHITE_BISHOP,
         //     piece_value: game_state::get_piece_integer(PieceType::WHITE_BISHOP),
@@ -440,8 +439,8 @@ impl Game {
 
         // white_pieces.insert("WHITE_ROOK1".to_string(), Box::new(white_rook1));
         // white_pieces.insert("WHITE_ROOK2".to_string(), Box::new(white_rook2));
-        // white_pieces.insert("WHITE_KNIGHT1".to_string(), Box::new(white_knight1));
-        // white_pieces.insert("WHITE_KNIGHT2".to_string(), Box::new(white_knight2));
+        white_pieces.insert("WHITE_KNIGHT1".to_string(), Box::new(white_knight1));
+        white_pieces.insert("WHITE_KNIGHT2".to_string(), Box::new(white_knight2));
         // white_pieces.insert("WHITE_BISHOP1".to_string(), Box::new(white_bishop1));
         // white_pieces.insert("WHITE_BISHOP2".to_string(), Box::new(white_bishop2));
         white_pieces.insert("WHITE_QUEEN".to_string(), Box::new(white_queen));
@@ -461,7 +460,7 @@ impl Game {
             current_coord: "A7".to_string(),
             allowed_moves: vec!["A6".to_string(), "A5".to_string()],
         };
-        state_map.insert("B7".to_string(),"BLACK_PAWN1".to_string());
+        state_map.insert("A7".to_string(),"BLACK_PAWN1".to_string());
 
         let black_pawn2 = Piece {
             piece_type: PieceType::BLACK_PAWN,
@@ -519,6 +518,21 @@ impl Game {
         };
         state_map.insert("H7".to_string(),"BLACK_PAWN8".to_string());
 
+        let black_knight1 = Piece {
+            piece_type: PieceType::BLACK_KNIGHT,
+            piece_value: game_state::get_piece_integer(PieceType::WHITE_KNIGHT),
+            current_coord: "B8".to_string(),
+            allowed_moves: vec!["C6".to_string(), "A6".to_string()],
+        };
+        state_map.insert("B1".to_string(),"WHITE_KNIGHT1".to_string());
+
+        let black_knight2 = Piece {
+            piece_type: PieceType::BLACK_KNIGHT,
+            piece_value: game_state::get_piece_integer(PieceType::WHITE_KNIGHT),
+            current_coord: "G8".to_string(),
+            allowed_moves: vec!["H6".to_string(), "F6".to_string()],
+        };
+        state_map.insert("G1".to_string(),"WHITE_KNIGHT2".to_string());
         black_pieces.insert("BLACK_PAWN1".to_string(), Box::new(black_pawn1));
         black_pieces.insert("BLACK_PAWN2".to_string(), Box::new(black_pawn2));
         black_pieces.insert("BLACK_PAWN3".to_string(), Box::new(black_pawn3));
@@ -527,6 +541,8 @@ impl Game {
         black_pieces.insert("BLACK_PAWN6".to_string(), Box::new(black_pawn6));
         black_pieces.insert("BLACK_PAWN7".to_string(), Box::new(black_pawn7));
         black_pieces.insert("BLACK_PAWN8".to_string(), Box::new(black_pawn8));
+        black_pieces.insert("BLACK_KNIGHT1".to_string(), Box::new(black_knight1));
+        black_pieces.insert("BLACK_KNIGHT2".to_string(), Box::new(black_knight2));
 
         Game {
             player_turn: PlayerColor::WHITE,
