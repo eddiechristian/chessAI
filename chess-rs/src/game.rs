@@ -72,8 +72,8 @@ impl Piece {
                             let en_passant_move = format!("en-passant{}{}-{}",
                                     ((coord0[0] + coord1[0]) / 2 ) as char,
                                     match  self.piece_type {
-                                        PieceType::WHITE_PAWN => '6',
-                                        PieceType::BLACK_PAWN => '3',
+                                        PieceType::BLACK_PAWN => '6',
+                                        PieceType::WHITE_PAWN => '3',
                                         _ => ' '
                                     },
                                     previous_player_move[1],
@@ -81,7 +81,7 @@ impl Piece {
                             self.allowed_moves.push(en_passant_move.to_string());
                         }
                     }
-                    if self.piece_type == PieceType::WHITE_PAWN {
+                    if self.piece_type == PieceType::BLACK_PAWN {
                         let chess_moves = vec![
                             format!("{}{}" ,  piece_coord_bytes[0] as char, (piece_coord_bytes[1] as u8 + 2) as char ),
                             format!("{}{}" ,  piece_coord_bytes[0] as char, (piece_coord_bytes[1] as u8 + 1) as char ),
@@ -92,7 +92,7 @@ impl Piece {
                             if ((index == 0) && (piece_coord_bytes[1] == '2' as u8)) || (index > 0){
                                 if let Ok(coloropt) = state.get_player_color_at(&chess_move.as_bytes()) {
                                     if let Some(player_color) = coloropt  {
-                                        if (index > 1) && (player_color == PlayerColor::BLACK) {
+                                        if (index > 1) && (player_color == PlayerColor::WHITE) {
                                             self.allowed_moves.push(chess_move.to_string());
                                         }
                                     } else if index < 2{
@@ -112,7 +112,7 @@ impl Piece {
                             if ((index == 0) && (piece_coord_bytes[1] == '7' as u8)) ||  (index > 0) {
                                 if let Ok(coloropt) = state.get_player_color_at(&chess_move.as_bytes()) {
                                     if let Some(player_color) = coloropt  {
-                                        if (index > 1) && (player_color == PlayerColor::WHITE) {
+                                        if (index > 1) && (player_color == PlayerColor::BLACK) {
                                             self.allowed_moves.push(chess_move.to_string());
                                         }
                                     } else if index < 2{
@@ -321,7 +321,7 @@ impl Game {
         // };
         // state_map.insert("H1".to_string(),"WHITE_ROOK2".to_string());
         //
-        let white_knight1 = Piece {
+        let black_knight1 = Piece {
             piece_type: PieceType::WHITE_KNIGHT,
             piece_value: game_state::get_piece_integer(PieceType::WHITE_KNIGHT),
             current_coord: "B1".to_string(),
@@ -329,7 +329,7 @@ impl Game {
         };
         state_map.insert("B1".to_string(),"WHITE_KNIGHT1".to_string());
 
-        let white_knight2 = Piece {
+        let black_knight2 = Piece {
             piece_type: PieceType::WHITE_KNIGHT,
             piece_value: game_state::get_piece_integer(PieceType::WHITE_KNIGHT),
             current_coord: "G1".to_string(),
@@ -337,7 +337,7 @@ impl Game {
         };
         state_map.insert("G1".to_string(),"WHITE_KNIGHT2".to_string());
 
-        // let white_bishop1 = Piece {
+        // let black_bishop1 = Piece {
         //     piece_type: PieceType::WHITE_BISHOP,
         //     piece_value: game_state::get_piece_integer(PieceType::WHITE_BISHOP),
         //     current_coord: "C1".to_string(),
@@ -346,7 +346,7 @@ impl Game {
         // };
         // state_map.insert("C1".to_string(),"WHITE_BISHOP1".to_string());
         //
-        // let white_bishop2 = Piece {
+        // let black_bishop2 = Piece {
         //     piece_type: PieceType::WHITE_BISHOP,
         //     piece_value: game_state::get_piece_integer(PieceType::WHITE_BISHOP),
         //     current_coord: "F1".to_string(),
@@ -355,7 +355,7 @@ impl Game {
         // };
         // state_map.insert("F1".to_string(),"WHITE_BISHOP2".to_string());
         //
-        let white_queen = Piece {
+        let black_queen = Piece {
             piece_type: PieceType::WHITE_QUEEN,
             piece_value: game_state::get_piece_integer(PieceType::WHITE_QUEEN),
             current_coord: "D1".to_string(),
@@ -363,7 +363,7 @@ impl Game {
         };
         state_map.insert("D1".to_string(),"WHITE_QUEEN".to_string());
         //
-        // let white_king = Piece {
+        // let black_king = Piece {
         //     piece_type: PieceType::WHITE_KING,
         //     piece_value: game_state::get_piece_integer(PieceType::WHITE_KING),
         //     current_coord: "E1".to_string(),
@@ -373,166 +373,78 @@ impl Game {
         // state_map.insert("E1".to_string(),"WHITE_KING".to_string());
 
 
-        let white_pawn1 = Piece {
-            piece_type: PieceType::WHITE_PAWN,
-            piece_value: game_state::get_piece_integer(PieceType::WHITE_PAWN),
-            current_coord: "A2".to_string(),
-            allowed_moves: vec!["A3".to_string(), "A4".to_string()],
-        };
-        state_map.insert("A2".to_string(),"WHITE_PAWN1".to_string());
-        //
-        let white_pawn2 = Piece {
-            piece_type: PieceType::WHITE_PAWN,
-            piece_value: game_state::get_piece_integer(PieceType::WHITE_PAWN),
-            current_coord: "B2".to_string(),
-            allowed_moves: vec!["B3".to_string(), "B4".to_string()],
-        };
-        state_map.insert("B2".to_string(),"WHITE_PAWN2".to_string());
-
-        let white_pawn3 = Piece {
-            piece_type: PieceType::WHITE_PAWN,
-            piece_value: game_state::get_piece_integer(PieceType::WHITE_PAWN),
-            current_coord: "C2".to_string(),
-            allowed_moves: vec!["C3".to_string(), "C4".to_string()],
-        };
-        state_map.insert("C2".to_string(),"WHITE_PAWN3".to_string());
-
-        let white_pawn4 = Piece {
-            piece_type: PieceType::WHITE_PAWN,
-            piece_value: game_state::get_piece_integer(PieceType::WHITE_PAWN),
-            current_coord: "D2".to_string(),
-            allowed_moves: vec!["D3".to_string(), "D4".to_string()],
-        };
-        state_map.insert("D2".to_string(),"WHITE_PAWN4".to_string());
-
-        let white_pawn5 = Piece {
-            piece_type: PieceType::WHITE_PAWN,
-            piece_value: game_state::get_piece_integer(PieceType::WHITE_PAWN),
-            current_coord: "E2".to_string(),
-            allowed_moves: vec!["E3".to_string(), "E4".to_string()],
-        };
-        state_map.insert("E2".to_string(),"WHITE_PAWN5".to_string());
-
-        let white_pawn6 = Piece {
-            piece_type: PieceType::WHITE_PAWN,
-            piece_value: game_state::get_piece_integer(PieceType::WHITE_PAWN),
-            current_coord: "F2".to_string(),
-            allowed_moves: vec!["F3".to_string(), "F4".to_string()],
-        };
-        state_map.insert("F2".to_string(),"WHITE_PAWN6".to_string());
-
-        let white_pawn7 = Piece {
-            piece_type: PieceType::WHITE_PAWN,
-            piece_value: game_state::get_piece_integer(PieceType::WHITE_PAWN),
-            current_coord: "G2".to_string(),
-            allowed_moves: vec!["G3".to_string(), "G4".to_string()],
-        };
-        state_map.insert("G2".to_string(),"WHITE_PAWN7".to_string());
-
-        let white_pawn8 = Piece {
-            piece_type: PieceType::WHITE_PAWN,
-            piece_value: game_state::get_piece_integer(PieceType::WHITE_PAWN),
-            current_coord: "H2".to_string(),
-            allowed_moves: vec!["H3".to_string(), "H4".to_string()],
-        };
-        state_map.insert("H2".to_string(),"WHITE_PAWN8".to_string());
-
-        // white_pieces.insert("WHITE_ROOK1".to_string(), Box::new(white_rook1));
-        // white_pieces.insert("WHITE_ROOK2".to_string(), Box::new(white_rook2));
-        white_pieces.insert("WHITE_KNIGHT1".to_string(), Box::new(white_knight1));
-        white_pieces.insert("WHITE_KNIGHT2".to_string(), Box::new(white_knight2));
-        // white_pieces.insert("WHITE_BISHOP1".to_string(), Box::new(white_bishop1));
-        // white_pieces.insert("WHITE_BISHOP2".to_string(), Box::new(white_bishop2));
-        white_pieces.insert("WHITE_QUEEN".to_string(), Box::new(white_queen));
-        // white_pieces.insert("WHITE_KING".to_string(), Box::new(white_king));
-        white_pieces.insert("WHITE_PAWN1".to_string(), Box::new(white_pawn1));
-        white_pieces.insert("WHITE_PAWN2".to_string(), Box::new(white_pawn2));
-        white_pieces.insert("WHITE_PAWN3".to_string(), Box::new(white_pawn3));
-        white_pieces.insert("WHITE_PAWN4".to_string(), Box::new(white_pawn4));
-        white_pieces.insert("WHITE_PAWN5".to_string(), Box::new(white_pawn5));
-        white_pieces.insert("WHITE_PAWN6".to_string(), Box::new(white_pawn6));
-        white_pieces.insert("WHITE_PAWN7".to_string(), Box::new(white_pawn7));
-        white_pieces.insert("WHITE_PAWN8".to_string(), Box::new(white_pawn8));
-
         let black_pawn1 = Piece {
             piece_type: PieceType::BLACK_PAWN,
             piece_value: game_state::get_piece_integer(PieceType::BLACK_PAWN),
-            current_coord: "A7".to_string(),
-            allowed_moves: vec!["A6".to_string(), "A5".to_string()],
+            current_coord: "A2".to_string(),
+            allowed_moves: vec!["A3".to_string(), "A4".to_string()],
         };
-        state_map.insert("A7".to_string(),"BLACK_PAWN1".to_string());
-
+        state_map.insert("A2".to_string(),"BLACK_PAWN1".to_string());
+        //
         let black_pawn2 = Piece {
             piece_type: PieceType::BLACK_PAWN,
             piece_value: game_state::get_piece_integer(PieceType::BLACK_PAWN),
-            current_coord: "B7".to_string(),
-            allowed_moves: vec!["B6".to_string(), "B5".to_string()],
+            current_coord: "B2".to_string(),
+            allowed_moves: vec!["B3".to_string(), "B4".to_string()],
         };
-        state_map.insert("B7".to_string(),"BLACK_PAWN2".to_string());
+        state_map.insert("B2".to_string(),"BLACK_PAWN2".to_string());
 
         let black_pawn3 = Piece {
             piece_type: PieceType::BLACK_PAWN,
             piece_value: game_state::get_piece_integer(PieceType::BLACK_PAWN),
-            current_coord: "C7".to_string(),
-            allowed_moves: vec!["C6".to_string(), "C5".to_string()],
+            current_coord: "C2".to_string(),
+            allowed_moves: vec!["C3".to_string(), "C4".to_string()],
         };
-        state_map.insert("C7".to_string(),"BLACK_PAWN3".to_string());
+        state_map.insert("C2".to_string(),"BLACK_PAWN3".to_string());
 
         let black_pawn4 = Piece {
             piece_type: PieceType::BLACK_PAWN,
             piece_value: game_state::get_piece_integer(PieceType::BLACK_PAWN),
-            current_coord: "D7".to_string(),
-            allowed_moves: vec!["D6".to_string(), "D5".to_string()],
+            current_coord: "D2".to_string(),
+            allowed_moves: vec!["D3".to_string(), "D4".to_string()],
         };
-        state_map.insert("D7".to_string(),"BLACK_PAWN4".to_string());
+        state_map.insert("D2".to_string(),"BLACK_PAWN4".to_string());
 
         let black_pawn5 = Piece {
             piece_type: PieceType::BLACK_PAWN,
             piece_value: game_state::get_piece_integer(PieceType::BLACK_PAWN),
-            current_coord: "E7".to_string(),
-            allowed_moves: vec!["E6".to_string(), "E5".to_string()],
+            current_coord: "E2".to_string(),
+            allowed_moves: vec!["E3".to_string(), "E4".to_string()],
         };
-        state_map.insert("E7".to_string(),"BLACK_PAWN5".to_string());
+        state_map.insert("E2".to_string(),"BLACK_PAWN5".to_string());
 
         let black_pawn6 = Piece {
             piece_type: PieceType::BLACK_PAWN,
             piece_value: game_state::get_piece_integer(PieceType::BLACK_PAWN),
-            current_coord: "F7".to_string(),
-            allowed_moves: vec!["F6".to_string(), "F5".to_string()],
+            current_coord: "F2".to_string(),
+            allowed_moves: vec!["F3".to_string(), "F4".to_string()],
         };
-        state_map.insert("F7".to_string(),"BLACK_PAWN6".to_string());
+        state_map.insert("F2".to_string(),"BLACK_PAWN6".to_string());
 
         let black_pawn7 = Piece {
             piece_type: PieceType::BLACK_PAWN,
             piece_value: game_state::get_piece_integer(PieceType::BLACK_PAWN),
-            current_coord: "G7".to_string(),
-            allowed_moves: vec!["G6".to_string(), "G5".to_string()],
+            current_coord: "G2".to_string(),
+            allowed_moves: vec!["G3".to_string(), "G4".to_string()],
         };
-        state_map.insert("G7".to_string(),"BLACK_PAWN7".to_string());
+        state_map.insert("G2".to_string(),"BLACK_PAWN7".to_string());
 
         let black_pawn8 = Piece {
             piece_type: PieceType::BLACK_PAWN,
             piece_value: game_state::get_piece_integer(PieceType::BLACK_PAWN),
-            current_coord: "H7".to_string(),
-            allowed_moves: vec!["H6".to_string(), "H5".to_string()],
+            current_coord: "H2".to_string(),
+            allowed_moves: vec!["H3".to_string(), "H4".to_string()],
         };
-        state_map.insert("H7".to_string(),"BLACK_PAWN8".to_string());
+        state_map.insert("H2".to_string(),"BLACK_PAWN8".to_string());
 
-        let black_knight1 = Piece {
-            piece_type: PieceType::BLACK_KNIGHT,
-            piece_value: game_state::get_piece_integer(PieceType::WHITE_KNIGHT),
-            current_coord: "B8".to_string(),
-            allowed_moves: vec!["C6".to_string(), "A6".to_string()],
-        };
-        state_map.insert("B1".to_string(),"WHITE_KNIGHT1".to_string());
-
-        let black_knight2 = Piece {
-            piece_type: PieceType::BLACK_KNIGHT,
-            piece_value: game_state::get_piece_integer(PieceType::WHITE_KNIGHT),
-            current_coord: "G8".to_string(),
-            allowed_moves: vec!["H6".to_string(), "F6".to_string()],
-        };
-        state_map.insert("G1".to_string(),"WHITE_KNIGHT2".to_string());
+        // black_pieces.insert("BLACK_ROOK1".to_string(), Box::new(black_rook1));
+        // black_pieces.insert("BLACK_ROOK2".to_string(), Box::new(black_rook2));
+        black_pieces.insert("BLACK_KNIGHT1".to_string(), Box::new(black_knight1));
+        black_pieces.insert("BLACK_KNIGHT2".to_string(), Box::new(black_knight2));
+        // black_pieces.insert("BLACK_BISHOP1".to_string(), Box::new(black_bishop1));
+        // black_pieces.insert("BLACK_BISHOP2".to_string(), Box::new(black_bishop2));
+        black_pieces.insert("BLACK_QUEEN".to_string(), Box::new(black_queen));
+        // black_pieces.insert("BLACK_KING".to_string(), Box::new(black_king));
         black_pieces.insert("BLACK_PAWN1".to_string(), Box::new(black_pawn1));
         black_pieces.insert("BLACK_PAWN2".to_string(), Box::new(black_pawn2));
         black_pieces.insert("BLACK_PAWN3".to_string(), Box::new(black_pawn3));
@@ -541,8 +453,96 @@ impl Game {
         black_pieces.insert("BLACK_PAWN6".to_string(), Box::new(black_pawn6));
         black_pieces.insert("BLACK_PAWN7".to_string(), Box::new(black_pawn7));
         black_pieces.insert("BLACK_PAWN8".to_string(), Box::new(black_pawn8));
-        black_pieces.insert("BLACK_KNIGHT1".to_string(), Box::new(black_knight1));
-        black_pieces.insert("BLACK_KNIGHT2".to_string(), Box::new(black_knight2));
+
+        let white_pawn1 = Piece {
+            piece_type: PieceType::WHITE_PAWN,
+            piece_value: game_state::get_piece_integer(PieceType::WHITE_PAWN),
+            current_coord: "A7".to_string(),
+            allowed_moves: vec!["A6".to_string(), "A5".to_string()],
+        };
+        state_map.insert("A7".to_string(),"WHITE_PAWN1".to_string());
+
+        let white_pawn2 = Piece {
+            piece_type: PieceType::WHITE_PAWN,
+            piece_value: game_state::get_piece_integer(PieceType::WHITE_PAWN),
+            current_coord: "B7".to_string(),
+            allowed_moves: vec!["B6".to_string(), "B5".to_string()],
+        };
+        state_map.insert("B7".to_string(),"WHITE_PAWN2".to_string());
+
+        let white_pawn3 = Piece {
+            piece_type: PieceType::WHITE_PAWN,
+            piece_value: game_state::get_piece_integer(PieceType::WHITE_PAWN),
+            current_coord: "C7".to_string(),
+            allowed_moves: vec!["C6".to_string(), "C5".to_string()],
+        };
+        state_map.insert("C7".to_string(),"WHITE_PAWN3".to_string());
+
+        let white_pawn4 = Piece {
+            piece_type: PieceType::WHITE_PAWN,
+            piece_value: game_state::get_piece_integer(PieceType::WHITE_PAWN),
+            current_coord: "D7".to_string(),
+            allowed_moves: vec!["D6".to_string(), "D5".to_string()],
+        };
+        state_map.insert("D7".to_string(),"WHITE_PAWN4".to_string());
+
+        let white_pawn5 = Piece {
+            piece_type: PieceType::WHITE_PAWN,
+            piece_value: game_state::get_piece_integer(PieceType::WHITE_PAWN),
+            current_coord: "E7".to_string(),
+            allowed_moves: vec!["E6".to_string(), "E5".to_string()],
+        };
+        state_map.insert("E7".to_string(),"WHITE_PAWN5".to_string());
+
+        let white_pawn6 = Piece {
+            piece_type: PieceType::WHITE_PAWN,
+            piece_value: game_state::get_piece_integer(PieceType::WHITE_PAWN),
+            current_coord: "F7".to_string(),
+            allowed_moves: vec!["F6".to_string(), "F5".to_string()],
+        };
+        state_map.insert("F7".to_string(),"WHITE_PAWN6".to_string());
+
+        let white_pawn7 = Piece {
+            piece_type: PieceType::WHITE_PAWN,
+            piece_value: game_state::get_piece_integer(PieceType::WHITE_PAWN),
+            current_coord: "G7".to_string(),
+            allowed_moves: vec!["G6".to_string(), "G5".to_string()],
+        };
+        state_map.insert("G7".to_string(),"WHITE_PAWN7".to_string());
+
+        let white_pawn8 = Piece {
+            piece_type: PieceType::WHITE_PAWN,
+            piece_value: game_state::get_piece_integer(PieceType::WHITE_PAWN),
+            current_coord: "H7".to_string(),
+            allowed_moves: vec!["H6".to_string(), "H5".to_string()],
+        };
+        state_map.insert("H7".to_string(),"WHITE_PAWN8".to_string());
+
+        let white_knight1 = Piece {
+            piece_type: PieceType::WHITE_KNIGHT,
+            piece_value: game_state::get_piece_integer(PieceType::WHITE_KNIGHT),
+            current_coord: "B8".to_string(),
+            allowed_moves: vec!["C6".to_string(), "A6".to_string()],
+        };
+        state_map.insert("B1".to_string(),"WHITE_KNIGHT1".to_string());
+
+        let white_knight2 = Piece {
+            piece_type: PieceType::WHITE_KNIGHT,
+            piece_value: game_state::get_piece_integer(PieceType::WHITE_KNIGHT),
+            current_coord: "G8".to_string(),
+            allowed_moves: vec!["H6".to_string(), "F6".to_string()],
+        };
+        state_map.insert("G1".to_string(),"WHITE_KNIGHT2".to_string());
+        white_pieces.insert("WHITE_PAWN1".to_string(), Box::new(white_pawn1));
+        white_pieces.insert("WHITE_PAWN2".to_string(), Box::new(white_pawn2));
+        white_pieces.insert("WHITE_PAWN3".to_string(), Box::new(white_pawn3));
+        white_pieces.insert("WHITE_PAWN4".to_string(), Box::new(white_pawn4));
+        white_pieces.insert("WHITE_PAWN5".to_string(), Box::new(white_pawn5));
+        white_pieces.insert("WHITE_PAWN6".to_string(), Box::new(white_pawn6));
+        white_pieces.insert("WHITE_PAWN7".to_string(), Box::new(white_pawn7));
+        white_pieces.insert("WHITE_PAWN8".to_string(), Box::new(white_pawn8));
+        white_pieces.insert("WHITE_KNIGHT1".to_string(), Box::new(white_knight1));
+        white_pieces.insert("WHITE_KNIGHT2".to_string(), Box::new(white_knight2));
 
         Game {
             player_turn: PlayerColor::WHITE,
