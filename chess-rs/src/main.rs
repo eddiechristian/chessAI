@@ -7,6 +7,7 @@ extern crate lazy_static;
 mod game;
 mod game_state;
 mod knight;
+mod bishop;
 
 use std::process::Command;
 
