@@ -8,6 +8,7 @@ mod game;
 mod game_state;
 mod knight;
 mod bishop;
+mod rook;
 
 use std::process::Command;
 
@@ -29,5 +30,7 @@ fn main() {
     the_game.take_action( "C8-F5");
     println!("{}{}{}", termion::clear::All, termion::cursor::Goto(1, 1), the_game.state);
     the_game.take_action( "A2-A3");
+    println!("{}{}{}", termion::clear::All, termion::cursor::Goto(1, 1), the_game.state);
+    the_game.take_action( "D8-D7");
     println!("{}{}{}", termion::clear::All, termion::cursor::Goto(1, 1), the_game.state);
 }

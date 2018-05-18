@@ -218,7 +218,7 @@ impl GameState {
                 _ => Ok(Some(PlayerColor::BLACK))
             }
         } else {
-            Err(format!("fix this"))
+            Err(format!("Invalid piece coord"))
         }
     }
 
@@ -256,6 +256,7 @@ impl GameState {
     }
 
     pub fn get_index(&self, coord: &[u8]) ->  Result<usize, String > {
+        //println!("get index coord {:?}", str::from_utf8(&coord).unwrap());
         let col:u8  = match coord[0] as char {
             'a'|'A' => 0,
             'b'|'B' => 1,

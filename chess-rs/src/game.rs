@@ -13,8 +13,10 @@ use std::mem;
 use std::slice;
 use game_state;
 use game_state::{GameState, PlayerColor, PieceType};
+use std::str;
 use knight;
 use bishop;
+use rook;
 
 
 lazy_static! {
@@ -131,11 +133,11 @@ impl Piece {
                 },
                 PieceType::WHITE_QUEEN |
                 PieceType::BLACK_QUEEN => {
-
+                    self.allowed_moves = bishop::get_bishop_moves(&state, piece_coord.into_bytes());
                 },
                 PieceType::WHITE_ROOK |
                 PieceType::BLACK_ROOK => {
-
+                    self.allowed_moves = rook::get_rook_moves(&state, piece_coord.into_bytes());
                 },
                 PieceType::WHITE_BISHOP |
                 PieceType::BLACK_BISHOP => {
@@ -261,7 +263,7 @@ impl Game {
             }
         };
 
-        println!("{:?}", squares);
+        println!("action: {}-{}", squares[0], squares[1]);
         let from_val =  { get_mut_piece_at(self, squares[0]).unwrap().piece_value };
         let from_index =  self.state.get_index(squares[0].as_bytes()).unwrap();
 
@@ -281,7 +283,6 @@ impl Game {
             to_piece.current_coord = squares[1].to_string();
         }
         if let Some(state_map_val) = self.state_map.remove(squares[0]) {
-            println!("state_map_val {:?}", state_map_val);
             self.state_map.insert(squares[len_squares-1].to_string(), state_map_val);
         } else {
             panic!(format!("could not remove state_map entry {:?}",squares[0]));
@@ -290,11 +291,18 @@ impl Game {
         self.state.id = self.state.board.calculate_id().into_bytes();
         self.player_turn = {
             match self.player_turn {
-                PlayerColor::WHITE => PlayerColor::BLACK,
-                PlayerColor::BLACK => PlayerColor::WHITE
+                PlayerColor::WHITE => {
+                    self.state.player_turn = PlayerColor::BLACK;
+                    PlayerColor::BLACK
+                }
+                    ,
+                PlayerColor::BLACK => {
+                    self.state.player_turn = PlayerColor::WHITE;
+                    PlayerColor::WHITE
+                }
             }
         };
-        println!("player_turn {:?}", self.player_turn);
+        println!("take_action player_turn {:?}", self.player_turn);
         self.calculate_new_moves(&squares);
     }
 
@@ -304,24 +312,22 @@ impl Game {
 
         let mut state_map = BTreeMap::new();
 
-        // let white_rook1 = Piece {
-        //     piece_type: PieceType::WHITE_ROOK,
-        //     piece_value: game_state::get_piece_integer(PieceType::WHITE_ROOK),
-        //     current_coord: "A1".to_string(),
-        //     allowed_moves: Vec::new(),
-        //     pieces_affected: move_vecs::affected_pieces_map.get("A1").unwrap() as *const PieceAffected,
-        // };
-        // state_map.insert("A1".to_string(),"WHITE_ROOK1".to_string());
-        //
-        // let white_rook2 = Piece {
-        //     piece_type: PieceType::WHITE_ROOK,
-        //     piece_value: game_state::get_piece_integer(PieceType::WHITE_ROOK),
-        //     current_coord: "H1".to_string(),
-        //     allowed_moves: Vec::new(),
-        //     pieces_affected: move_vecs::affected_pieces_map.get("H1").unwrap() as *const PieceAffected,
-        // };
-        // state_map.insert("H1".to_string(),"WHITE_ROOK2".to_string());
-        //
+        let black_rook1 = Piece {
+            piece_type: PieceType::BLACK_ROOK,
+            piece_value: game_state::get_piece_integer(PieceType::BLACK_ROOK),
+            current_coord: "A1".to_string(),
+            allowed_moves: Vec::new(),
+        };
+        state_map.insert("A1".to_string(),"BLACK_ROOK1".to_string());
+
+        let black_rook2 = Piece {
+            piece_type: PieceType::BLACK_ROOK,
+            piece_value: game_state::get_piece_integer(PieceType::BLACK_ROOK),
+            current_coord: "H1".to_string(),
+            allowed_moves: Vec::new(),
+        };
+        state_map.insert("H1".to_string(),"BLACK_ROOK2".to_string());
+
         let black_knight1 = Piece {
             piece_type: PieceType::BLACK_KNIGHT,
             piece_value: game_state::get_piece_integer(PieceType::BLACK_KNIGHT),
@@ -436,8 +442,8 @@ impl Game {
         };
         state_map.insert("H2".to_string(),"BLACK_PAWN8".to_string());
 
-        // black_pieces.insert("BLACK_ROOK1".to_string(), Box::new(black_rook1));
-        // black_pieces.insert("BLACK_ROOK2".to_string(), Box::new(black_rook2));
+        black_pieces.insert("BLACK_ROOK1".to_string(), Box::new(black_rook1));
+        black_pieces.insert("BLACK_ROOK2".to_string(), Box::new(black_rook2));
         black_pieces.insert("BLACK_KNIGHT1".to_string(), Box::new(black_knight1));
         black_pieces.insert("BLACK_KNIGHT2".to_string(), Box::new(black_knight2));
         // black_pieces.insert("BLACK_BISHOP1".to_string(), Box::new(black_bishop1));
@@ -548,6 +554,30 @@ impl Game {
         };
         state_map.insert("F8".to_string(),"WHITE_BISHOP2".to_string());
 
+        let white_rook1 = Piece {
+            piece_type: PieceType::WHITE_ROOK,
+            piece_value: game_state::get_piece_integer(PieceType::WHITE_ROOK),
+            current_coord: "A8".to_string(),
+            allowed_moves: Vec::new(),
+        };
+        state_map.insert("A8".to_string(),"WHITE_ROOK1".to_string());
+
+        let white_rook2 = Piece {
+            piece_type: PieceType::WHITE_ROOK,
+            piece_value: game_state::get_piece_integer(PieceType::WHITE_ROOK),
+            current_coord: "H8".to_string(),
+            allowed_moves: Vec::new(),
+        };
+        state_map.insert("H8".to_string(),"WHITE_ROOK2".to_string());
+
+        let white_queen = Piece {
+            piece_type: PieceType::WHITE_QUEEN,
+            piece_value: game_state::get_piece_integer(PieceType::WHITE_QUEEN),
+            current_coord: "D8".to_string(),
+            allowed_moves: Vec::new(),
+        };
+        state_map.insert("D8".to_string(),"WHITE_QUEEN".to_string());
+
         white_pieces.insert("WHITE_PAWN1".to_string(), Box::new(white_pawn1));
         white_pieces.insert("WHITE_PAWN2".to_string(), Box::new(white_pawn2));
         white_pieces.insert("WHITE_PAWN3".to_string(), Box::new(white_pawn3));
@@ -560,6 +590,9 @@ impl Game {
         white_pieces.insert("WHITE_KNIGHT2".to_string(), Box::new(white_knight2));
         white_pieces.insert("WHITE_BISHOP1".to_string(), Box::new(white_bishop1));
         white_pieces.insert("WHITE_BISHOP2".to_string(), Box::new(white_bishop2));
+        white_pieces.insert("WHITE_QUEEN".to_string(), Box::new(white_queen));
+        white_pieces.insert("WHITE_ROOK1".to_string(), Box::new(white_rook1));
+        white_pieces.insert("WHITE_ROOK2".to_string(), Box::new(white_rook2));
 
         Game {
             player_turn: PlayerColor::WHITE,

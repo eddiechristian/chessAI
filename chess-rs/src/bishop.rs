@@ -1,4 +1,5 @@
 use game_state;
+use std::str;
 
 pub fn get_bishop_moves(state: &game_state::GameState, piece_coord: Vec<u8>) -> Vec<String> {
     let mut can_move_here = true;
@@ -43,6 +44,8 @@ pub fn get_bishop_moves(state: &game_state::GameState, piece_coord: Vec<u8>) -> 
                         bishop_move_str.push(move_piece_coord1 as u8 as char);
 
                         allowed_bishop_moves.push(bishop_move_str);
+                    } else {
+                        break;
                     }
                 }
 
@@ -59,6 +62,7 @@ pub fn get_bishop_moves(state: &game_state::GameState, piece_coord: Vec<u8>) -> 
     while true {
         move_piece_coord0 += up_right.0;
         move_piece_coord1 += up_right.1;
+        can_move_here = true;
         if  (move_piece_coord0 as u8)  < 'I' as u8 {
             if  (move_piece_coord1 as u8)  > '0' as u8 {
                 let mut coord:Vec<u8> = Vec::new();
@@ -80,6 +84,8 @@ pub fn get_bishop_moves(state: &game_state::GameState, piece_coord: Vec<u8>) -> 
                         bishop_move_str.push(move_piece_coord1 as u8 as char);
 
                         allowed_bishop_moves.push(bishop_move_str);
+                    } else {
+                        break;
                     }
                 }
 
@@ -93,11 +99,12 @@ pub fn get_bishop_moves(state: &game_state::GameState, piece_coord: Vec<u8>) -> 
     //down_left
     move_piece_coord0 = piece_coord[0] as i8;
     move_piece_coord1 = piece_coord[1] as i8;
+    can_move_here = true;
     while true {
         move_piece_coord0 += down_left.0;
         move_piece_coord1 += down_left.1;
-        if  (move_piece_coord0 as u8)  < 'I' as u8 {
-            if  (move_piece_coord1 as u8)  > '0' as u8 {
+        if  (move_piece_coord0 as u8)  >= 'A' as u8 {
+            if  (move_piece_coord1 as u8)  < '9' as u8 {
                 let mut coord:Vec<u8> = Vec::new();
                 coord.push(move_piece_coord0 as u8);
                 coord.push(move_piece_coord1 as u8);
@@ -117,6 +124,8 @@ pub fn get_bishop_moves(state: &game_state::GameState, piece_coord: Vec<u8>) -> 
                         bishop_move_str.push(move_piece_coord1 as u8 as char);
 
                         allowed_bishop_moves.push(bishop_move_str);
+                    } else {
+                        break;
                     }
                 }
 
@@ -130,10 +139,11 @@ pub fn get_bishop_moves(state: &game_state::GameState, piece_coord: Vec<u8>) -> 
     //up_left
     move_piece_coord0 = piece_coord[0] as i8;
     move_piece_coord1 = piece_coord[1] as i8;
+    can_move_here = true;
     while true {
         move_piece_coord0 += up_left.0;
         move_piece_coord1 += up_left.1;
-        if  (move_piece_coord0 as u8)  < 'I' as u8 {
+        if  (move_piece_coord0 as u8)  >= 'A' as u8 {
             if  (move_piece_coord1 as u8)  > '0' as u8 {
                 let mut coord:Vec<u8> = Vec::new();
                 coord.push(move_piece_coord0 as u8);
@@ -154,7 +164,11 @@ pub fn get_bishop_moves(state: &game_state::GameState, piece_coord: Vec<u8>) -> 
                         bishop_move_str.push(move_piece_coord1 as u8 as char);
 
                         allowed_bishop_moves.push(bishop_move_str);
+                    } else {
+                        break;
                     }
+                } else {
+                    panic!("could not find piece");
                 }
 
             } else {
