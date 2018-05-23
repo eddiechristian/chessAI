@@ -59,6 +59,7 @@ pub fn get_bishop_moves(state: &game_state::GameState, piece_coord: Vec<u8>) -> 
     //up_right
     move_piece_coord0 = piece_coord[0] as i8;
     move_piece_coord1 = piece_coord[1] as i8;
+    can_move_here = true;
     while true {
         move_piece_coord0 += up_right.0;
         move_piece_coord1 += up_right.1;

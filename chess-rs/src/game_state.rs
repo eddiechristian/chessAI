@@ -58,7 +58,7 @@ pub fn get_piece_integer(piece_type: PieceType ) -> u32 {
     }
 }
 
-fn get_piece_type(piece_int: u32 ) -> PieceType {
+pub fn get_piece_type(piece_int: u32 ) -> PieceType {
     match piece_int {
         0u32  => PieceType::NO_PIECE,
         1u32  => PieceType::WHITE_KING,
@@ -197,6 +197,9 @@ impl GameState {
             player_turn: PlayerColor::WHITE,
         }
 
+    }
+    pub fn get_id(&self) -> String {
+        str::from_utf8(&self.id).unwrap().to_string()
     }
     //
     // fn in_check(&self, piece: usize) -> Vec<String> {
@@ -360,9 +363,9 @@ impl fmt::Display for GameState {
         let line7 = self.generate_line(7);
         let line8 = self.generate_line(8);
 
-        write!(f, "id:{}\n\n{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}",
-            str::from_utf8(&self.id).unwrap() , grid_line, top_border, line1, middle_border, line2, middle_border, line3, middle_border,
+        write!(f, "\n{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}",
+            grid_line, top_border, line1, middle_border, line2, middle_border, line3, middle_border,
             line4, middle_border, line5, middle_border, line6, middle_border, line7,
-            middle_border, line8, bottom_border)
+            middle_border, line8, bottom_border )
     }
 }

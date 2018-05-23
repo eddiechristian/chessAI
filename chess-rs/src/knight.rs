@@ -1,7 +1,6 @@
 use game_state;
 
 pub fn get_knight_moves(state: &game_state::GameState, piece_coord: Vec<u8>) -> Vec<String> {
-    println!("get_knight_moves player_turn {:?} ", state.player_turn);
     let mut can_move_here = true;
     let mut allowed_knight_moves: Vec<String> = Vec::new();
     let front_left_short0 = piece_coord[0] + 2;
